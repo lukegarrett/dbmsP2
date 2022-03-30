@@ -64,7 +64,7 @@ CREATE TABLE accidents_megatable (
 
 SELECT COUNT(*)
 FROM accidents_megatable;
--- 2,845,343 accidents in this dataset
+-- 2,845,343 accidents in this dataset 
 
 LOAD DATA
 	LOCAL INFILE 'C:/Users/micha/Downloads/US_Accidents_Dec21_updated.csv' 
