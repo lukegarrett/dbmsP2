@@ -64,6 +64,7 @@ CREATE TABLE accidents_megatable (
 
 SELECT COUNT(*)
 FROM accidents_megatable;
+-- 2,845,343 accidents in this dataset
 
 LOAD DATA
 	LOCAL INFILE 'C:/Users/micha/Downloads/US_Accidents_Dec21_updated.csv' 
@@ -71,3 +72,37 @@ LOAD DATA
 	FIELDS TERMINATED BY ',' 
 	ENCLOSED BY '"'
 	LINES TERMINATED BY '\n';
+    
+-- Megatable Decomposition --
+DROP TABLE IF EXISTS weather_conditions;
+CREATE TABLE weather_conditions (
+	accident_id VARCHAR(20) NOT NULL,
+    temperature INT,
+    wind_chill INT,
+    humidity DECIMAL,
+    pressure DECIMAL,
+    visibility DECIMAL,
+    wind_direction VARCHAR(4),
+    wind_speed INT,
+    precipitation DECIMAL,
+    weather_condition VARCHAR(10),
+    PRIMARY KEY (accident_id),
+    CONSTRAINT fk_id FOREIGN KEY (accident_id)
+		REFERENCES accidents_megatable(accident_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE = INNODB;
+
+INSERT INTO weather_conditions
+SELECT 
+	accident_id,
+    temperature,
+    wind_chill,
+    humidity,
+    pressure,
+    visibility,
+    wind_direction,
+    wind_speed,
+    precipitation,
+    weather_condition
+FROM accidents_megatable;
