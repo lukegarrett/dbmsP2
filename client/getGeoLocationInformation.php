@@ -8,7 +8,7 @@
 if (isset($_POST['field_submit'])) {
     require_once("conn.php");
     $var_accident = $_POST['field_accident'];
-    $query = "SELECT * FROM weather_conditions WHERE accident_id = :ph_accident";
+    $query = "SELECT * FROM geo_location_info WHERE accident_id = :ph_accident";
 
 try
     {
@@ -48,10 +48,10 @@ try
 							<!-- Content -->
 								<section>
 									<header class="main">
-										<h1>Get Weather Information</h1>
+										<h1>Get Geo Location Information</h1>
 									</header>
 
-									<h3> Search for weather by accident_id</h3>
+									<h3> Search for geo location information by accident_id</h3>
 									<form method="post">
 
 									<label for="accident_id">Accident ID</label>
