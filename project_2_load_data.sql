@@ -268,3 +268,57 @@ SELECT
 	nautical_twilight,
 	astronomical_twilight
 FROM accidents_megatable;
+
+-- CREATE INDEX --
+USE us_accidents;
+
+DROP INDEX index_accident_id ON accidents_megatable;
+CREATE INDEX index_accident_id ON accidents_megatable(accident_id);
+
+-- VIEWS --
+-- Create a view for each table --
+-- accident_information --
+CREATE OR REPLACE VIEW accident_info_view AS
+SELECT *
+FROM accident_information;
+
+-- address_information --
+CREATE OR REPLACE VIEW address_info_view AS
+SELECT *
+FROM address_information;
+
+-- geo_location --
+CREATE OR REPLACE VIEW geo_location_view AS
+SELECT *
+FROM geo_location;
+
+-- intersection_information --
+CREATE OR REPLACE VIEW intersection_info_view AS
+SELECT *
+FROM intersection_information;
+
+-- twilight_information --
+CREATE OR REPLACE VIEW twilight_info_view AS
+SELECT *
+FROM twilight_information;
+
+-- weather_conditions --
+CREATE OR REPLACE VIEW weather_conditions_view AS
+SELECT *
+FROM weather_conditions;
+
+
+-- STORED PROCEDURES --
+-- Get a specifc accident info --
+DROP PROCEDURE IF EXISTS getAccidentInfo;
+DELIMITER //
+CREATE PROCEDURE getAccidentInfo(IN id VARCHAR(20))
+BEGIN
+	SELECT *
+    FROM accident_info_view
+    WHERE accident_id = id;
+END//
+DELIMITER ;
+
+CALL getAccidentInfo('A-1');
+

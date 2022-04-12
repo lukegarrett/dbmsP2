@@ -8,7 +8,7 @@
 if (isset($_POST['field_submit'])) {
     require_once("conn.php");
     $var_accident = $_POST['field_accident'];
-    $query = "SELECT * FROM accidents_megatable WHERE accident_id = :ph_accident";
+    $query = "SELECT * FROM accidents_megatable WHERE severity = :ph_accident LIMIT 1000";
 
 try
     {
