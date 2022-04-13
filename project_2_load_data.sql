@@ -41,7 +41,7 @@ CREATE TABLE accidents_megatable (
     wind_direction VARCHAR(4),
     wind_speed INT,
     precipitation DECIMAL,
-    weather_condition VARCHAR(10),
+    weather_condition VARCHAR(30),
     amenity VARCHAR(5),
     bump VARCHAR(5),
     crossing VARCHAR(5),
@@ -67,7 +67,8 @@ FROM accidents_megatable;
 -- 2,845,343 accidents in this dataset 
 
 LOAD DATA
-	LOCAL INFILE 'C:/Users/micha/Downloads/US_Accidents_Dec21_updated.csv' 
+	-- LOCAL INFILE 'C:/Users/micha/Downloads/US_Accidents_Dec21_updated.csv' --
+    LOCAL INFILE 'C:/Users/garre/Desktop/US_Accidents_Dec21_updated.csv' 
 	INTO TABLE accidents_megatable 
 	FIELDS TERMINATED BY ',' 
 	ENCLOSED BY '"'
@@ -88,7 +89,7 @@ CREATE TABLE weather_conditions (
     wind_direction VARCHAR(4),
     wind_speed INT,
     precipitation DECIMAL,
-    weather_condition VARCHAR(10),
+    weather_condition VARCHAR(30),
     weather_timestamp VARCHAR(20),
     PRIMARY KEY (accident_id),
     CONSTRAINT fk_id FOREIGN KEY (accident_id)
@@ -306,7 +307,18 @@ FROM twilight_information;
 CREATE OR REPLACE VIEW weather_conditions_view AS
 SELECT *
 FROM weather_conditions;
-
+-- average severity by state view --
+CREATE OR REPLACE VIEW average_severity_view AS
+SELECT state, AVG(severity) as average_severity
+FROM accident_information
+		JOIN address_information USING(accident_id)
+GROUP BY state;
+-- weather condition avg severity --
+CREATE OR REPLACE VIEW average_severity_weather_view AS
+SELECT weather_condition, AVG(severity) as average_severity
+FROM accident_information
+		JOIN weather_conditions USING(accident_id)
+GROUP BY weather_condition;
 
 -- STORED PROCEDURES --
 -- Get a specifc accident info --
@@ -322,3 +334,30 @@ DELIMITER ;
 
 CALL getAccidentInfo('A-1');
 
+-- get average severity of states that have an average severity above a certain value --
+DROP PROCEDURE IF EXISTS getStateSeverity;
+DELIMITER //
+CREATE PROCEDURE getStateSeverity(IN minimum INT)
+BEGIN
+	SELECT *
+    FROM average_severity_view
+    HAVING average_severity >= minimum
+    ORDER BY average_severity DESC;
+END//
+DELIMITER ;
+
+CALL getStateSeverity(2);
+
+-- get average severity during specific weather conditions --
+DROP PROCEDURE IF EXISTS getWeatherSeverity;
+DELIMITER //
+CREATE PROCEDURE getWeatherSeverity(IN minimum INT)
+BEGIN
+	SELECT *
+    FROM average_severity_weather_view
+    HAVING average_severity >= minimum
+    ORDER BY average_severity DESC;
+END//
+DELIMITER ;
+
+CALL getWeatherSeverity(2);
