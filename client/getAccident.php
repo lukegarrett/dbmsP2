@@ -8,7 +8,7 @@
 if (isset($_POST['field_submit'])) {
     require_once("conn.php");
     $var_accident = $_POST['field_accident'];
-    $query = "SELECT * FROM accidents_megatable WHERE accident_id = :ph_accident";
+    $query = "CALL getAccidentInfo(:ph_accident)";
 
 try
     {
@@ -43,13 +43,6 @@ try
 							<!-- Header -->
 								<header id="header">
 									<a href="index.html" class="logo"><strong>US Accidents</strong> by Michael Dobson and Luke Garrett</a>
-									<!-- <ul class="icons">
-										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-										<li><a href="#" class="icon brands fa-snapchat-ghost"><span class="label">Snapchat</span></a></li>
-										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-										<li><a href="#" class="icon brands fa-medium-m"><span class="label">Medium</span></a></li>
-									</ul> -->
 								</header>
 
 							<!-- Content -->

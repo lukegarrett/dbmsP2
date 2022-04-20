@@ -67,8 +67,8 @@ FROM accidents_megatable;
 -- 2,845,343 accidents in this dataset 
 
 LOAD DATA
-	-- LOCAL INFILE 'C:/Users/micha/Downloads/US_Accidents_Dec21_updated.csv' --
-    LOCAL INFILE 'C:/Users/garre/Desktop/US_Accidents_Dec21_updated.csv' 
+	LOCAL INFILE 'C:/Users/micha/Downloads/US_Accidents_Dec21_updated.csv' --
+    -- LOCAL INFILE 'C:/Users/garre/Desktop/US_Accidents_Dec21_updated.csv' 
 	INTO TABLE accidents_megatable 
 	FIELDS TERMINATED BY ',' 
 	ENCLOSED BY '"'
@@ -273,7 +273,7 @@ FROM accidents_megatable;
 -- CREATE INDEX --
 USE us_accidents;
 
-DROP INDEX index_accident_id ON accidents_megatable;
+-- DROP INDEX IF EXISTS index_accident_id ON accidents_megatable;
 CREATE INDEX index_accident_id ON accidents_megatable(accident_id);
 
 -- VIEWS --
@@ -360,4 +360,15 @@ BEGIN
 END//
 DELIMITER ;
 
+USE us_accidents;
 CALL getWeatherSeverity(2);
+
+SELECT *
+FROM accident_information;
+
+SELECT severity, COUNT(*)
+FROM accident_information
+GROUP BY severity;
+
+
+SELECT * FROM average_severity_weather_view;
