@@ -2,7 +2,7 @@
 if (isset($_POST['field_submit'])) {
     require_once("conn.php");
     $var_accident = $_POST['field_accident'];
-    $query = "CALL insertAccidentInfo(:ph_accident)";
+    $query = "CALL deleteAccident(:ph_accident)";
 
 try
     {
@@ -42,10 +42,10 @@ try
 							<!-- Content -->
 								<section>
 									<header class="main">
-										<h1>Insert an accident</h1>
+										<h1>Delete an accident</h1>
 									</header>
 
-									<h3> Insert an accident</h3>
+									<h3> Search an accident to delete by accident_id</h3>
 									<form method="post">
 
 									<label for="accident_id">accident</label>
@@ -67,7 +67,7 @@ try
 												<?php foreach ($result as $row) { ?>
 												
 													<tr>
-													<td><?php echo $row["The accident was inserted."]; ?></td>
+													<td><?php echo $row["The accident was deleted."]; ?></td>
 													</tr>
 												<?php } ?>
 												</tbody>

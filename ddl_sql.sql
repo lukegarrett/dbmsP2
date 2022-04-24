@@ -12,13 +12,22 @@ BEGIN
 	START TRANSACTION;
 		DELETE FROM accident_information
         WHERE accident_id = id;
-    
+        DELETE FROM address_information
+        WHERE accident_id = id;
+        DELETE FROM geo_location
+        WHERE accident_id = id;
+        DELETE FROM intersection_information
+        WHERE accident_id = id;
+        DELETE FROM weather_conditions
+        WHERE accident_id = id;
+        
+
 		IF sql_error = FALSE THEN
 			COMMIT;
 			SELECT 'The accident was deleted.';
 		ELSE
 			ROLLBACK;
-			   SELECT 'The transaction was rolled back.';
+			SELECT 'The transaction was rolled back.';
 		END IF;
 END//
 DELIMITER ;
@@ -148,17 +157,89 @@ BEGIN
 			nautical_twilight,
 			astronomical_twilight);
     
--- 		IF sql_error = FALSE THEN
--- 			COMMIT;
--- 			SELECT 'The accident was deleted.';
--- 		ELSE
--- 			ROLLBACK;
--- 			SELECT 'The transaction was rolled back.';
--- 		END IF;
+		IF sql_error = FALSE THEN
+			COMMIT;
+			SELECT 'The accident was inserted.';
+		ELSE
+			ROLLBACK;
+			SELECT 'The transaction was rolled back.';
+		END IF;
 END//
 DELIMITER ;
 
 SELECT *
-FROM accident_information;
+FROM accident_information
+WHERE accident_id = 'X2';
 
-CALL insertAccident('A-', '3', '2016-02-08 00:37:08', '2016-02-08 06:37:08', '40', '-83', '40', '-83', '3', 'Between Sawmill Rd/Exit 20 and OH-315/Olentangy Riv Rd/Exit 22 - Accident.', '0', 'Outerbelt E', 'R', 'Dublin', 'Franklin', 'OH', '43017', 'US', 'US/Eastern', 'KOSU', '2016-02-08 00:53:00', '42', '36', '58', '30', '10', 'SW', '10', '0', 'Light Rain', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'Night', 'Night', 'Night', 'Night');
+CALL insertAccident('X2', '3', '2016-02-08 00:37:08', '2016-02-08 06:37:08', '40', '-83', '40', '-83', '3', 'Between Sawmill Rd/Exit 20 and OH-315/Olentangy Riv Rd/Exit 22 - Accident.', '0', 'Outerbelt E', 'R', 'Dublin', 'Franklin', 'OH', '43017', 'US', 'US/Eastern', 'KOSU', '2016-02-08 00:53:00', '42', '36', '58', '30', '10', 'SW', '10', '0', 'Light Rain', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'Night', 'Night', 'Night', 'Night');
+CALL deleteAccident('A-');
+
+DROP PROCEDURE IF EXISTS insertAccidentInfo;
+DELIMITER //
+CREATE PROCEDURE insertAccidentInfo(
+	accident_id VARCHAR(20),
+	start_time DATETIME,
+    end_time DATETIME,
+    severity TINYINT,
+	distance INT,
+	description VARCHAR(100),
+	timezone VARCHAR(15))
+BEGIN
+	DECLARE sql_error INT DEFAULT FALSE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET sql_error = TRUE;
+
+	START TRANSACTION;
+		INSERT INTO accident_information
+		VALUES (
+			accident_id,
+			start_time,
+			end_time,
+			severity ,
+			distance ,
+			description,
+			timezone);
+    
+		IF sql_error = FALSE THEN
+			COMMIT;
+			SELECT 'The accident was inserted.';
+		ELSE
+			ROLLBACK;
+			SELECT 'The transaction was rolled back.';
+		END IF;
+END//
+DELIMITER ;
+
+SELECT *
+FROM accident_information
+WHERE accident_id = 'X5';
+CALL insertAccidentInfo('X', '2016-02-08 00:37:08', '2016-02-08 06:37:08', '3', '3', 'Between Sawmill Rd/Exit 20 and OH-315/Olentangy Riv Rd/Exit 22 - Accident.', 'US/Eastern');
+
+
+DROP PROCEDURE IF EXISTS insertTest;
+DELIMITER //
+CREATE PROCEDURE insertTest(
+	accident_id VARCHAR(20))
+BEGIN
+	DECLARE sql_error INT DEFAULT FALSE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET sql_error = TRUE;
+
+	START TRANSACTION;
+		INSERT INTO accident_information
+		VALUES (
+			accident_id);
+    
+		IF sql_error = FALSE THEN
+			COMMIT;
+			SELECT 'The accident was inserted.';
+		ELSE
+			ROLLBACK;
+			SELECT 'The transaction was rolled back.';
+		END IF;
+END//
+DELIMITER ;
+SELECT *
+FROM accident_information
+WHERE accident_id = 'X5';
+CALL insertTest('X5');
+INSERT INTO accident_information
+VALUES ('X-1');

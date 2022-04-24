@@ -89,6 +89,7 @@ CREATE TABLE accident_information(
 	timezone VARCHAR(15),
 	PRIMARY KEY (accident_id)
 );
+
 DROP TABLE IF EXISTS geo_location;
 CREATE TABLE geo_location(
 	accident_id VARCHAR(20) NOT NULL,
@@ -121,7 +122,7 @@ CREATE TABLE weather_conditions (
 		REFERENCES accident_information(accident_id)
         ON UPDATE CASCADE
         ON DELETE CASCADE
-) ENGINE = INNODB;
+);
 
 DROP TABLE IF EXISTS address_information;
 CREATE TABLE address_information(
@@ -165,8 +166,6 @@ CREATE TABLE intersection_information(
         ON DELETE CASCADE
 );
 
-
-
 DROP TABLE IF EXISTS twilight_information;
 CREATE TABLE twilight_information(
 	accident_id VARCHAR(20) NOT NULL,
@@ -188,13 +187,6 @@ CREATE TABLE weather_severity(
 
 
 -- DATA INSERT --
-DELETE FROM weather_severity;
-INSERT INTO weather_severity
-SELECT weather_condition, AVG(severity) as average_severity
-FROM accident_information
-		JOIN weather_conditions USING(accident_id)
-GROUP BY weather_condition;
-
 SET SQL_SAFE_UPDATES = 0;
 
 DELETE FROM accident_information;
@@ -224,6 +216,13 @@ SELECT
     weather_condition,
     weather_timestamp
 FROM accidents_megatable;
+
+DELETE FROM weather_severity;
+INSERT INTO weather_severity
+SELECT weather_condition, AVG(severity) as average_severity
+FROM accident_information
+		JOIN weather_conditions USING(accident_id)
+GROUP BY weather_condition;
 
 DELETE FROM geo_location;
 INSERT INTO geo_location
@@ -268,9 +267,6 @@ SELECT
 	traffic_signal,
 	turning_loop
 FROM accidents_megatable;
-
-
-
 
 DELETE FROM twilight_information;
 INSERT INTO twilight_information
@@ -355,8 +351,6 @@ BEGIN
 END//
 DELIMITER ;
 
-CALL getAccidentInfo('A-1');
-
 -- get average severity of states that have an average severity above a certain value --
 DROP PROCEDURE IF EXISTS getStateSeverity;
 DELIMITER //
@@ -368,8 +362,6 @@ BEGIN
     ORDER BY average_severity DESC;
 END//
 DELIMITER ;
-
-CALL getStateSeverity(2);
 
 -- get average severity during specific weather conditions --
 DROP PROCEDURE IF EXISTS getWeatherSeverity;
@@ -383,18 +375,9 @@ BEGIN
 END//
 DELIMITER ;
 
-USE us_accidents;
-CALL getWeatherSeverity(2);
-
-SELECT *
-FROM accident_information;
-
 SELECT severity, COUNT(*)
 FROM accident_information
 GROUP BY severity;
-
-
-SELECT * FROM average_severity_weather_view;
 
 -- Full join --
 DROP PROCEDURE IF EXISTS getAllInfo;
@@ -411,5 +394,3 @@ BEGIN
 	WHERE accident_id = id;
 END//
 DELIMITER ;
-
-CALL getAllInfo('A-1');
