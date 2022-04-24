@@ -78,26 +78,6 @@ DELETE FROM accidents_megatable
 WHERE accident_id = 'ID';
     
 -- Megatable Decomposition --
-DROP TABLE IF EXISTS weather_conditions;
-CREATE TABLE weather_conditions (
-	accident_id VARCHAR(20) NOT NULL,
-    temperature INT,
-    wind_chill INT,
-    humidity DECIMAL,
-    pressure DECIMAL,
-    visibility DECIMAL,
-    wind_direction VARCHAR(4),
-    wind_speed INT,
-    precipitation DECIMAL,
-    weather_condition VARCHAR(30),
-    weather_timestamp VARCHAR(20),
-    PRIMARY KEY (accident_id),
-    CONSTRAINT fk_id FOREIGN KEY (accident_id)
-		REFERENCES accidents_megatable(accident_id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-) ENGINE = INNODB;
-
 DROP TABLE IF EXISTS accident_information;
 CREATE TABLE accident_information(
 	accident_id VARCHAR(20) NOT NULL,
@@ -122,6 +102,26 @@ CREATE TABLE geo_location(
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+
+DROP TABLE IF EXISTS weather_conditions;
+CREATE TABLE weather_conditions (
+	accident_id VARCHAR(20) NOT NULL,
+    temperature INT,
+    wind_chill INT,
+    humidity DECIMAL,
+    pressure DECIMAL,
+    visibility DECIMAL,
+    wind_direction VARCHAR(4),
+    wind_speed INT,
+    precipitation DECIMAL,
+    weather_condition VARCHAR(30),
+    weather_timestamp VARCHAR(20),
+    PRIMARY KEY (accident_id),
+    CONSTRAINT fk_id FOREIGN KEY (accident_id)
+		REFERENCES accident_information(accident_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE = INNODB;
 
 DROP TABLE IF EXISTS address_information;
 CREATE TABLE address_information(
