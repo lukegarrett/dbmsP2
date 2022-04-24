@@ -275,7 +275,18 @@ USE us_accidents;
 
 -- DROP INDEX IF EXISTS index_accident_id ON accidents_megatable;
 CREATE INDEX index_accident_id ON accidents_megatable(accident_id);
-
+USE us_accidents;
+CREATE INDEX index_accident_id_information ON accident_information(accident_id);
+USE us_accidents;
+CREATE INDEX index_accident_id_address ON address_information(accident_id);
+USE us_accidents;
+CREATE INDEX index_accident_id_geo ON geo_location(accident_id);
+USE us_accidents;
+CREATE INDEX index_accident_id_intersection ON intersection_information(accident_id);
+USE us_accidents;
+CREATE INDEX index_accident_id_twilight ON twilight_information(accident_id);
+USE us_accidents;
+CREATE INDEX index_accident_id_weather ON weather_conditions(accident_id);
 -- VIEWS --
 -- Create a view for each table --
 -- accident_information --
