@@ -167,13 +167,6 @@ BEGIN
 END//
 DELIMITER ;
 
-SELECT *
-FROM accident_information
-WHERE accident_id = 'X2';
-
-CALL insertAccident('X2', '3', '2016-02-08 00:37:08', '2016-02-08 06:37:08', '40', '-83', '40', '-83', '3', 'Between Sawmill Rd/Exit 20 and OH-315/Olentangy Riv Rd/Exit 22 - Accident.', '0', 'Outerbelt E', 'R', 'Dublin', 'Franklin', 'OH', '43017', 'US', 'US/Eastern', 'KOSU', '2016-02-08 00:53:00', '42', '36', '58', '30', '10', 'SW', '10', '0', 'Light Rain', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'False', 'Night', 'Night', 'Night', 'Night');
-CALL deleteAccident('A-');
-
 DROP PROCEDURE IF EXISTS insertAccidentInfo;
 DELIMITER //
 CREATE PROCEDURE insertAccidentInfo(
@@ -209,8 +202,30 @@ BEGIN
 END//
 DELIMITER ;
 
--- CALL insertAccidentInfo('X5', '2016-02-08 00:37:08', '2016-02-08 06:37:08', '3', '3', 'Between Sawmill Rd/Exit 20 and OH-315/Olentangy Riv Rd/Exit 22 - Accident.', 'US/Eastern');
-
 SELECT *
 FROM accident_information
 WHERE accident_id = 'X6';
+
+DROP PROCEDURE IF EXISTS updateAccidentInfo;
+DELIMITER //
+CREATE PROCEDURE updateAccidentInfo(
+	id VARCHAR(20),
+    sev TINYINT)
+BEGIN
+	DECLARE sql_error INT DEFAULT FALSE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET sql_error = TRUE;
+
+	START TRANSACTION;
+		UPDATE accident_information
+        SET severity = sev
+        WHERE accident_id = id;
+    
+		IF sql_error = FALSE THEN
+			COMMIT;
+			SELECT 'The accident was inserted.';
+		ELSE
+			ROLLBACK;
+			SELECT 'The transaction was rolled back.';
+		END IF;
+END//
+DELIMITER ;
