@@ -98,6 +98,17 @@ CREATE TABLE weather_conditions (
         ON DELETE CASCADE
 ) ENGINE = INNODB;
 
+DROP TABLE IF EXISTS accident_information;
+CREATE TABLE accident_information(
+	accident_id VARCHAR(20) NOT NULL,
+	start_time DATETIME,
+    end_time DATETIME,
+    severity TINYINT,
+	distance INT,
+	description VARCHAR(100),
+	timezone VARCHAR(15),
+	PRIMARY KEY (accident_id)
+);
 DROP TABLE IF EXISTS geo_location;
 CREATE TABLE geo_location(
 	accident_id VARCHAR(20) NOT NULL,
@@ -107,7 +118,7 @@ CREATE TABLE geo_location(
     end_lng DECIMAL,
 	PRIMARY KEY (accident_id),
     CONSTRAINT fk_id FOREIGN KEY (accident_id)
-		REFERENCES accidents_megatable(accident_id)
+		REFERENCES accident_information(accident_id)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
@@ -125,7 +136,7 @@ CREATE TABLE address_information(
 	country VARCHAR(2),
 	PRIMARY KEY (accident_id),
     CONSTRAINT fk_id FOREIGN KEY (accident_id)
-		REFERENCES accidents_megatable(accident_id)
+		REFERENCES accident_information(accident_id)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
@@ -149,26 +160,12 @@ CREATE TABLE intersection_information(
 	turning_loop VARCHAR(5),
 	PRIMARY KEY (accident_id),
     CONSTRAINT fk_id FOREIGN KEY (accident_id)
-		REFERENCES accidents_megatable(accident_id)
+		REFERENCES accident_information(accident_id)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS accident_information;
-CREATE TABLE accident_information(
-	accident_id VARCHAR(20) NOT NULL,
-	start_time DATETIME,
-    end_time DATETIME,
-    severity TINYINT,
-	distance INT,
-	description VARCHAR(100),
-	timezone VARCHAR(15),
-	PRIMARY KEY (accident_id),
-    CONSTRAINT fk_id FOREIGN KEY (accident_id)
-		REFERENCES accidents_megatable(accident_id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-);
+
 
 DROP TABLE IF EXISTS twilight_information;
 CREATE TABLE twilight_information(
@@ -179,7 +176,7 @@ CREATE TABLE twilight_information(
 	astronomical_twilight VARCHAR(5),
 	PRIMARY KEY (accident_id),
     CONSTRAINT fk_id FOREIGN KEY (accident_id)
-		REFERENCES accidents_megatable(accident_id)
+		REFERENCES accident_information(accident_id)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
@@ -199,6 +196,19 @@ FROM accident_information
 GROUP BY weather_condition;
 
 SET SQL_SAFE_UPDATES = 0;
+
+DELETE FROM accident_information;
+INSERT INTO accident_information
+SELECT 
+	accident_id,
+	start_time,
+    end_time,
+    severity ,
+	distance ,
+	description,
+	timezone
+FROM accidents_megatable;
+
 DELETE FROM weather_conditions;
 INSERT INTO weather_conditions
 SELECT 
@@ -260,17 +270,7 @@ SELECT
 FROM accidents_megatable;
 
 
-DELETE FROM accident_information;
-INSERT INTO accident_information
-SELECT 
-	accident_id,
-	start_time,
-    end_time,
-    severity ,
-	distance ,
-	description,
-	timezone
-FROM accidents_megatable;
+
 
 DELETE FROM twilight_information;
 INSERT INTO twilight_information
