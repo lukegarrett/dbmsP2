@@ -183,9 +183,21 @@ CREATE TABLE twilight_information(
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+DROP TABLE IF EXISTS weather_severity;
+CREATE TABLE weather_severity(
+	weather_condition VARCHAR(40),
+    average_severity DOUBLE
+);
 
 
 -- DATA INSERT --
+DELETE FROM weather_severity;
+INSERT INTO weather_severity
+SELECT weather_condition, AVG(severity) as average_severity
+FROM accident_information
+		JOIN weather_conditions USING(accident_id)
+GROUP BY weather_condition;
+
 SET SQL_SAFE_UPDATES = 0;
 DELETE FROM weather_conditions;
 INSERT INTO weather_conditions
@@ -365,7 +377,7 @@ DELIMITER //
 CREATE PROCEDURE getWeatherSeverity(IN minimum INT)
 BEGIN
 	SELECT *
-    FROM average_severity_weather_view
+    FROM weather_severity
     HAVING average_severity >= minimum
     ORDER BY average_severity DESC;
 END//
