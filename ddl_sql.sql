@@ -209,37 +209,8 @@ BEGIN
 END//
 DELIMITER ;
 
+-- CALL insertAccidentInfo('X5', '2016-02-08 00:37:08', '2016-02-08 06:37:08', '3', '3', 'Between Sawmill Rd/Exit 20 and OH-315/Olentangy Riv Rd/Exit 22 - Accident.', 'US/Eastern');
+
 SELECT *
 FROM accident_information
-WHERE accident_id = 'X5';
-CALL insertAccidentInfo('X', '2016-02-08 00:37:08', '2016-02-08 06:37:08', '3', '3', 'Between Sawmill Rd/Exit 20 and OH-315/Olentangy Riv Rd/Exit 22 - Accident.', 'US/Eastern');
-
-
-DROP PROCEDURE IF EXISTS insertTest;
-DELIMITER //
-CREATE PROCEDURE insertTest(
-	accident_id VARCHAR(20))
-BEGIN
-	DECLARE sql_error INT DEFAULT FALSE;
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET sql_error = TRUE;
-
-	START TRANSACTION;
-		INSERT INTO accident_information
-		VALUES (
-			accident_id);
-    
-		IF sql_error = FALSE THEN
-			COMMIT;
-			SELECT 'The accident was inserted.';
-		ELSE
-			ROLLBACK;
-			SELECT 'The transaction was rolled back.';
-		END IF;
-END//
-DELIMITER ;
-SELECT *
-FROM accident_information
-WHERE accident_id = 'X5';
-CALL insertTest('X5');
-INSERT INTO accident_information
-VALUES ('X-1');
+WHERE accident_id = 'X6';

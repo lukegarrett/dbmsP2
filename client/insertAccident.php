@@ -1,15 +1,28 @@
 <?php
 if (isset($_POST['field_submit'])) {
     require_once("conn.php");
-    $var_accident = $_POST['field_accident'];
-    $query = "CALL insertAccidentInfo(:ph_accident)";
+    $var_accident_id = $_POST['field_accident_id'];
+	$var_start_time = $_POST['field_start_time'];
+	// accident_id, start_time, end_time, severity, distance, description, timezone
+	$var_end_time = $_POST['field_end_time'];
+	$var_severity = $_POST['field_severity'];
+    $var_distance = $_POST['field_distance'];
+    $var_description = $_POST['field_description'];
+    $var_timezone = $_POST['field_timezone'];
+
+    $query = "CALL insertAccidentInfo(:accident_id, :start_time, :end_time, :severity, :distance, :description, :timezone)";
 
 try
     {
-      $prepared_stmt = $dbo->prepare($query);
-      $prepared_stmt->bindValue(':ph_accident', $var_accident, PDO::PARAM_STR);
-      $prepared_stmt->execute();
-      $result = $prepared_stmt->fetchAll();
+    $st = $dbo->prepare ( $query );
+    $st->bindValue( ":accident_id", $var_accident_id, PDO::PARAM_STR );
+    $st->bindValue( ":start_time", $var_start_time, PDO::PARAM_STR );
+	$st->bindValue( ":end_time", $var_end_time, PDO::PARAM_STR );
+	$st->bindValue( ":severity", $var_severity, PDO::PARAM_INT );
+	$st->bindValue( ":distance", $var_distance, PDO::PARAM_INT );
+	$st->bindValue( ":description", $var_description, PDO::PARAM_STR );
+	$st->bindValue( ":timezone", $var_timezone, PDO::PARAM_STR );
+    $st->execute();
 
     }
     catch (PDOException $ex)
@@ -48,35 +61,38 @@ try
 									<h3> Insert an accident</h3>
 									<form method="post">
 
-									<label for="accident_id">accident</label>
-									<input type="text" name="field_accident" id = "accident_id">
+									All fields are required!!
+									X6
+									<label for="accident_id">accident id</label>
+									<input type="text" name="field_accident_id" id = "accident_id">
+									2016-02-08 00:37:08
+									<label for="start_time">start time</label>
+									<input type="text" name="field_start_time" id = "start_time">
+									2016-02-08 00:37:08
+									<label for="end_time">end time</label>
+									<input type="text" name="field_end_time" id = "end_time">
+									3
+									<label for="severity">severity</label>
+									<input type="text" name="field_severity" id = "severity">
+									3
+									<label for="distance">distance</label>
+									<input type="text" name="field_distance" id = "distance">
+									testing
+									<label for="description">description</label>
+									<input type="text" name="field_description" id = "description">
+									US/Eastern
+									<label for="timezone">timezone</label>
+									<input type="text" name="field_timezone" id = "timezone">
+
 									<input type="submit" name="field_submit" value="Submit">
 									</form>
 									
 									<?php
 									if (isset($_POST['field_submit'])) {
-										if ($result && $prepared_stmt->rowCount() > 0) { ?>
-											<h2>Results</h2>
-											<table>
-												<thead>
-												<tr>
-													<th>Result</th>
-												</tr>
-												</thead>
-												<tbody>
-												<?php foreach ($result as $row) { ?>
-												
-													<tr>
-													<td><?php echo $row["The accident was inserted."]; ?></td>
-													</tr>
-												<?php } ?>
-												</tbody>
-											</table>
-								
-										<?php } else { ?>
-										<h3>Sorry, no results found for accident <?php echo $_POST['field_accident']; ?>. </h3>
-										<?php }
+										echo $_POST['field_description'];
+										echo $_POST['field_timezone'];
 									} ?>
+									
 								</section>
 							<footer>
 								<p><b>Creators: Michael Dobson and Luke Garrett</b> <br \>
