@@ -141,9 +141,10 @@ try
 										<li>
 											<span class="opener">Get specific information</span>
 											<ul>
-                                                <li><a href="getAccident.php">Get Accident Info</a></li>
-												<li><a href="getWeatherInfo.php">Get Weather Info</a></li>
-												<li><a href="#">Get Geo Location Info</a></li>
+											<li><a href="getAllInformation.php">Get Accident and Weather Information</a></li>
+												<li><a href="getAccident.php">Get Accident Information</a></li>
+												<li><a href="getWeatherInfo.php">Get Weather Information</a></li>
+												<li><a href="getAvgWeatherSeverity.php">Get Average Weather Severity</a></li>
 											</ul>
 										</li>
 									</ul>

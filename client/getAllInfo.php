@@ -2,7 +2,7 @@
 if (isset($_POST['field_submit'])) {
     require_once("conn.php");
     $var_accident = $_POST['field_accident'];
-    $query = "CALL getAccidentInfo(:ph_accident)";
+    $query = "CALL getAllInfo(:ph_accident)";
 
 try
     {
@@ -60,10 +60,20 @@ try
 											<table>
 												<thead>
 												<tr>
-													<th>accident_id</th>
-													<th>severity</th>
-													<th>description</th>
+													<th>Accident ID</th>
+													<th>Severity</th>
+													<th>Description</th>
 
+													<th>Temperature</th>
+													<th>Wind Chill</th>
+                                                    <th>Humidity</th>
+                                                    <th>Pressure</th>
+                                                    <th>Visibility</th>
+                                                    <th>Wind Direction</th>
+                                                    <th>Wind Speed</th>
+                                                    <th>Precipitation</th>
+                                                    <th>Weather Condition</th>
+                                                    <th>Weather Timestamp</th>
 												</tr>
 												</thead>
 												<tbody>
@@ -73,6 +83,17 @@ try
 													<td><?php echo $row["accident_id"]; ?></td>
 													<td><?php echo $row["severity"]; ?></td>
 													<td><?php echo $row["description"]; ?></td>
+													<td><?php echo $row["accident_id"]; ?></td>
+													<td><?php echo $row["temperature"]; ?></td>
+													<td><?php echo $row["wind_chill"]; ?></td>
+                                                    <td><?php echo $row["humidity"]; ?></td>
+                                                    <td><?php echo $row["pressure"]; ?></td>
+                                                    <td><?php echo $row["visibility"]; ?></td>
+                                                    <td><?php echo $row["wind_direction"]; ?></td>
+                                                    <td><?php echo $row["wind_speed"]; ?></td>
+                                                    <td><?php echo $row["precipitation"]; ?></td>
+                                                    <td><?php echo $row["weather_condition"]; ?></td>
+                                                    <td><?php echo $row["weather_timestamp"]; ?></td>
 
 													</tr>
 												<?php } ?>

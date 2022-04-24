@@ -383,3 +383,21 @@ GROUP BY severity;
 
 
 SELECT * FROM average_severity_weather_view;
+
+-- Full join --
+DROP PROCEDURE IF EXISTS getAllInfo;
+DELIMITER //
+CREATE PROCEDURE getAllInfo(IN id VARCHAR(20))
+BEGIN
+	SELECT *
+    FROM accident_information
+		JOIN address_information USING (accident_id)
+        JOIN geo_location USING (accident_id)
+        JOIN intersection_information USING (accident_id)
+        JOIN twilight_information USING (accident_id)
+        JOIN weather_conditions USING (accident_id)
+	WHERE accident_id = id;
+END//
+DELIMITER ;
+
+CALL getAllInfo('A-1');
