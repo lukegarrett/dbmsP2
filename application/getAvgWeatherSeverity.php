@@ -1,13 +1,19 @@
+
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
 <?php
 if (isset($_POST['field_submit'])) {
     require_once("conn.php");
     $var_accident = $_POST['field_accident'];
-    $query = "CALL deleteAccident(:ph_accident)";
+    $query = "CALL getWeatherSeverity(:ph_minimum)";
 
 try
     {
       $prepared_stmt = $dbo->prepare($query);
-      $prepared_stmt->bindValue(':ph_accident', $var_accident, PDO::PARAM_STR);
+      $prepared_stmt->bindValue(':ph_minimum', $var_accident, PDO::PARAM_STR);
       $prepared_stmt->execute();
       $result = $prepared_stmt->fetchAll();
 
@@ -42,15 +48,14 @@ try
 							<!-- Content -->
 								<section>
 									<header class="main">
-										<h1>Delete an accident</h1>
+										<h1>Get Average Weather Severity</h1>
 									</header>
 
-									<h3> Search an accident to delete by accident_id</h3>
+									<h3>Please input minimum severity level (1-5)</h3>
 									<form method="post">
-
-									<label for="accident_id">accident</label>
-									<input type="text" name="field_accident" id = "accident_id">
-									<input type="submit" name="field_submit" value="Submit">
+										<label for="minimum sev">Minimum Severity</label>
+										<input type="text" name="field_accident" id = "accident_id">
+										<input type="submit" name="field_submit" value="Submit">
 									</form>
 									
 									<?php
@@ -60,14 +65,16 @@ try
 											<table>
 												<thead>
 												<tr>
-													<th>Result</th>
+													<th>Weather Condition</th>
+													<th>Average Severity</th>
 												</tr>
 												</thead>
 												<tbody>
 												<?php foreach ($result as $row) { ?>
 												
 													<tr>
-													<td><?php echo $row["The accident was deleted."]; ?></td>
+														<td><?php echo $row["weather_condition"]; ?></td>
+														<td><?php echo $row["average_severity"]; ?></td>
 													</tr>
 												<?php } ?>
 												</tbody>
@@ -77,6 +84,7 @@ try
 										<h3>Sorry, no results found for accident <?php echo $_POST['field_accident']; ?>. </h3>
 										<?php }
 									} ?>
+
 								</section>
 							<footer>
 								<p><b>Creators: Michael Dobson and Luke Garrett</b> <br \>
@@ -113,13 +121,13 @@ try
 										<li>
 											<span class="opener">Get specific information</span>
 											<ul>
-												<li><a href="getAllInformation.php">Get Accident and Weather Information</a></li>
+												<li><a href="getAllInfo.php">Get Accident and Weather Information</a></li>
 												<li><a href="getAccident.php">Get Accident Information</a></li>
 												<li><a href="getWeatherInfo.php">Get Weather Information</a></li>
 												<li><a href="getAvgWeatherSeverity.php">Get Average Weather Severity</a></li>
 											</ul>
 										</li>
-                                        <li>
+										<li>
 											<span class="opener">Add or Edit Accidents</span>
 											<ul>
 												<li><a href="insertAccident.php">Insert an accident</a></li>
@@ -149,8 +157,3 @@ try
 	</body>
 	
 </html>
-<!--
-	Editorial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->

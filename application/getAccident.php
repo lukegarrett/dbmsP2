@@ -1,14 +1,8 @@
-
-<!--
-	Editorial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <?php
 if (isset($_POST['field_submit'])) {
     require_once("conn.php");
     $var_accident = $_POST['field_accident'];
-    $query = "SELECT * FROM weather_conditions WHERE accident_id = :ph_accident";
+    $query = "CALL getAccidentInfo(:ph_accident)";
 
 try
     {
@@ -48,13 +42,13 @@ try
 							<!-- Content -->
 								<section>
 									<header class="main">
-										<h1>Get Weather Information</h1>
+										<h1>Search an accident</h1>
 									</header>
 
-									<h3> Search for weather by accident_id</h3>
+									<h3> Search accident by accident_id</h3>
 									<form method="post">
 
-									<label for="accident_id">Accident ID</label>
+									<label for="accident_id">accident</label>
 									<input type="text" name="field_accident" id = "accident_id">
 									<input type="submit" name="field_submit" value="Submit">
 									</form>
@@ -66,17 +60,10 @@ try
 											<table>
 												<thead>
 												<tr>
-													<th>Accident ID</th>
-													<th>Temperature</th>
-													<th>Wind Chill</th>
-                                                    <th>Humidity</th>
-                                                    <th>Pressure</th>
-                                                    <th>Visibility</th>
-                                                    <th>Wind Direction</th>
-                                                    <th>Wind Speed</th>
-                                                    <th>Precipitation</th>
-                                                    <th>Weather Condition</th>
-                                                    <th>Weather Timestamp</th>
+													<th>accident_id</th>
+													<th>severity</th>
+													<th>description</th>
+
 												</tr>
 												</thead>
 												<tbody>
@@ -84,16 +71,8 @@ try
 												
 													<tr>
 													<td><?php echo $row["accident_id"]; ?></td>
-													<td><?php echo $row["temperature"]; ?></td>
-													<td><?php echo $row["wind_chill"]; ?></td>
-                                                    <td><?php echo $row["humidity"]; ?></td>
-                                                    <td><?php echo $row["pressure"]; ?></td>
-                                                    <td><?php echo $row["visibility"]; ?></td>
-                                                    <td><?php echo $row["wind_direction"]; ?></td>
-                                                    <td><?php echo $row["wind_speed"]; ?></td>
-                                                    <td><?php echo $row["precipitation"]; ?></td>
-                                                    <td><?php echo $row["weather_condition"]; ?></td>
-                                                    <td><?php echo $row["weather_timestamp"]; ?></td>
+													<td><?php echo $row["severity"]; ?></td>
+													<td><?php echo $row["description"]; ?></td>
 
 													</tr>
 												<?php } ?>
@@ -141,10 +120,18 @@ try
 										<li>
 											<span class="opener">Get specific information</span>
 											<ul>
-											<li><a href="getAllInformation.php">Get Accident and Weather Information</a></li>
+												<li><a href="getAllInfo.php">Get Accident and Weather Information</a></li>
 												<li><a href="getAccident.php">Get Accident Information</a></li>
 												<li><a href="getWeatherInfo.php">Get Weather Information</a></li>
 												<li><a href="getAvgWeatherSeverity.php">Get Average Weather Severity</a></li>
+											</ul>
+										</li>
+										<li>
+											<span class="opener">Add or Edit Accidents</span>
+											<ul>
+												<li><a href="insertAccident.php">Insert an accident</a></li>
+												<li><a href="updateAccident.php">Update an accident</a></li>
+												<li><a href="deleteAccident.php">Delete an accident</a></li>
 											</ul>
 										</li>
 									</ul>
@@ -169,3 +156,8 @@ try
 	</body>
 	
 </html>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
