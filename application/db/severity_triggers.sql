@@ -1,3 +1,8 @@
+-- Michael Dobson and Luke Garrett --
+-- Vanderbilt University --
+-- CS 3265: Database Management Systems --
+-- US Accidents Script File --
+-- LOAD DATA SCRIPT 3 --
 USE us_accidents;
 
 DELIMITER // 
